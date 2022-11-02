@@ -101,5 +101,12 @@ function updateListing(
     emit ListingUpdated(nftAddress, tokenId, newPrice, msg.sender);
 }
 
+event ListingPurchased(
+    address nftAddress,
+    uint256 tokenId,
+    address seller,
+    address buyer
+);
+
 
 }
