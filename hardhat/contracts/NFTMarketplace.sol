@@ -78,4 +78,28 @@ contract NFTMarketplace {
     // Emit the event
     emit ListingCanceled(nftAddress, tokenId, msg.sender);
 }
+
+event ListingUpdated(
+    address nftAddress,
+    uint256 tokenId,
+    uint256 newPrice,
+    address seller
+);
+
+function updateListing(
+    address nftAddress,
+    uint256 tokenId,
+    uint256 newPrice
+) external isListed(nftAddress, tokenId) isNFTOwner(nftAddress, tokenId) {
+    // Cannot update the price to be < 0
+    require(newPrice > 0, "MRKT: Price must be > 0");
+
+    // Update the listing price
+    listings[nftAddress][tokenId].price = newPrice;
+
+    // Emit the event
+    emit ListingUpdated(nftAddress, tokenId, newPrice, msg.sender);
+}
+
+
 }
