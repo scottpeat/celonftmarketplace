@@ -108,5 +108,35 @@ event ListingPurchased(
     address buyer
 );
 
+function purchaseListing(address nftAddress, uint256 tokenId) 
+external 
+payable
+isListed(nftAddress, tokenId)
+{
+    // load into memory
+    Listing memory listing = listings[nftAddress][tokenId];
+
+    // Buyer must habve sent enough ETH
+    require(msg.value == listing.prince, "MRKT: Incorrect ETH supplied");
+
+    // Delete listing from storage to save gas
+    delete listings[nftAddress][tokenId];
+
+
+    // Transfer NFT from seller to  buyer
+    IERC721(nftAddress).safeTransferFrom(
+        listing.seller,
+        msg.sender,
+        tokenId
+    );
+
+    // Transfer ETH Sent from buyer to seller
+    (bool sent,) = payable(listing.seller).call{value: msg.value}("");
+    require(sent, "Failed to transfer ETH);
+
+    // emit the event
+    emit ListingPurchased(nftAddress, tokenId, listing.seller, msg.sender);
+}
+
 
 }
