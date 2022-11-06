@@ -7,6 +7,19 @@ import MarketplaceABI from '../abis/NFTMarketplace.json';
 import NavBar from '../components/Navbar';
 import { MARKETPLACE_ADDRESS } from '../constants';
 import styled from 'styled-components';
+import { fallbackExchange } from '@urql/core/dist/types/exchanges/fallback';
+
+export default function Create() {
+  // State variables to contain information about the NFT being sold
+  const [nftAddress, setNftAddress] = useState('');
+  const [tokenId, setTokenId] = useState('');
+  const [price, setPrice] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showListingLink, setShowListingLink] = useState(false);
+
+  // Get signer from wagmi
+  const { data: signer } = useSigner();
+}
 
 const Container = div`
     display: flex;
