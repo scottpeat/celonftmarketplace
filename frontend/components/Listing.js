@@ -55,14 +55,15 @@ export default function Listing(props) {
   useEffect(() => {
     fetchNFTDetails();
   }, []);
+
   return (
-    <div>
+    <>
       {loading ? (
         <span>Loading...</span>
       ) : (
-        <CardStyle>
+        <Card>
           <img src={imageURI} />
-          <ContainerStyle>
+          <Container>
             <span>
               <b>
                 {name} - #{props.tokenId}
@@ -72,39 +73,38 @@ export default function Listing(props) {
             <span>
               Seller: {isOwner ? 'You' : props.seller.substring(0, 6) + '...'}
             </span>
-          </ContainerStyle>
-        </CardStyle>
+          </Container>
+        </Card>
       )}
-    </div>
+    </>
   );
 }
 
-const CardStyle = div`
-    /* Add shadows to create the "card" effect */
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
-    width: 256px;
-    border-radius: 5%;
-    cursor: pointer;
-    margin-top: 1rem;
-    margin-left: 1rem;
+const Card = styled.div`
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  width: 256px;
+  border-radius: 5%;
+  cursor: pointer;
+  margin-top: 1rem;
+  margin-left: 1rem;
 
-  
   & img {
     width: 100%;
     border-top-left-radius: 5%;
     border-top-right-radius: 5%;
   }
-  
+
   /* On mouse-over, add a deeper shadow */
-  &:hover {
+  & :hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   }
-  `;
+`;
 
-const ContainerStyle = div`
+const Container = styled.div`
   /* Add some padding inside the card container */
   display: flex;
   flex-direction: column;
   padding: 2px 16px;
-  `;
+`;

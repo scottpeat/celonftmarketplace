@@ -2,17 +2,17 @@ import Link from 'next/link';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import styled from 'styled-components';
 
-export default function NavBar() {
+export default function Navbar() {
   return (
-    <NavBarStyle>
+    <NavBar>
       <Link href="/">Home</Link>
       <Link href="/create">Create Listing</Link>
       <ConnectButton />
-    </NavBarStyle>
+    </NavBar>
   );
 }
 
-const NavBarStyle = styled.nav`
+const NavBar = styled.nav`
   display: flex;
   justify-content: center;
   column-gap: 2em;

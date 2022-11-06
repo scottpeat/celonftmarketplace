@@ -32,7 +32,9 @@ export default function Home() {
     `;
 
     // Create a urql client
-    const urqlClient = createClient({ url: SUBGRAPH_URL });
+    const urqlClient = createClient({
+      url: SUBGRAPH_URL,
+    });
 
     // Send the query to the subgraph GraphQL API, and get the response
     const response = await urqlClient.query(listingsQuery).toPromise();
@@ -71,14 +73,12 @@ export default function Home() {
                 key={listing.id}
                 href={`/${listing.nftAddress}/${listing.tokenId}`}
               >
-                <a>
-                  <Listing
-                    nftAddress={listing.nftAddress}
-                    tokenId={listing.tokenId}
-                    price={listing.price}
-                    seller={listing.seller}
-                  />
-                </a>
+                <Listing
+                  nftAddress={listing.nftAddress}
+                  tokenId={listing.tokenId}
+                  price={listing.price}
+                  seller={listing.seller}
+                />
               </Link>
             );
           })}
@@ -92,7 +92,7 @@ export default function Home() {
   );
 }
 
-const Container = div`
+const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
 `;

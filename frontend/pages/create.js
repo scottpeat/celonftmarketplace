@@ -133,36 +133,34 @@ export default function Create() {
         </button>
 
         {/* Button to take user to the NFT details page after listing is created */}
+
         {showListingLink && (
           <Link href={`/${nftAddress}/${tokenId}`}>
-            <a>
-              <button>View Listing</button>
-            </a>
+            <button>View Listing</button>
           </Link>
         )}
       </Container>
     </>
   );
 }
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 5rem;
+  margin: auto;
+  margin-top: auto;
+  border-radius: 1rem;
+  border: 1px solid black;
+  background-color: aliceblue;
+  width: 50%;
+  margin-top: 5%;
 
-const Container = div`
-    display: flex;
-    flex-direction: column;
-    padding: 5rem;
-    margin: auto;
-    margin-top: auto;
-    border-radius: 1rem;
-    border: 1px solid black;
-    background-color: aliceblue;
-    width: 50%;
-    margin-top: 5%;
-  
   & input {
     padding: 0.5rem;
     border-radius: 0.25rem;
     margin: 1rem 0 1rem 0;
   }
-  
+
   & button:first-of-type {
     margin-bottom: 1rem;
   }
