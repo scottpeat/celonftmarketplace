@@ -32,31 +32,6 @@ export function handleListingCreated(event: ListingCreated): void {
   listing.save();
 }
 
-export function handleListingUpdated(event: ListingUpdated): void {
-  // Recreate the ID that refers to the listing
-  // Since the listing is being updated,
-  // the datastore must already have an entity with this ID
-  // from when the listing was first created
-  const id =
-    event.params.nftAddress.toHex() +
-    '-' +
-    event.params.tokenId.toString() +
-    '-' +
-    event.params.seller.toHex();
-
-  // Attempt to load a pre-existing entity, instead of creating a new one
-  let listing = ListingEntity.load(id);
-
-  // If it exists
-  if (listing) {
-    // Update the price
-    listing.price = event.params.newPrice;
-
-    // Save the changes
-    listing.save();
-  }
-}
-
 export function handleListingCanceled(event: ListingCanceled): void {
   // Recreate the ID that refers to the listing
   // Since the listing is being updated, the datastore must already have an entity with this ID
@@ -96,6 +71,31 @@ export function handleListingPurchased(event: ListingPurchased): void {
   if (listing) {
     // Set the buyer
     listing.buyer = event.params.buyer;
+
+    // Save the changes
+    listing.save();
+  }
+}
+
+export function handleListingUpdated(event: ListingUpdated): void {
+  // Recreate the ID that refers to the listing
+  // Since the listing is being updated,
+  // the datastore must already have an entity with this ID
+  // from when the listing was first created
+  const id =
+    event.params.nftAddress.toHex() +
+    '-' +
+    event.params.tokenId.toString() +
+    '-' +
+    event.params.seller.toHex();
+
+  // Attempt to load a pre-existing entity, instead of creating a new one
+  let listing = ListingEntity.load(id);
+
+  // If it exists
+  if (listing) {
+    // Update the price
+    listing.price = event.params.newPrice;
 
     // Save the changes
     listing.save();
