@@ -149,7 +149,21 @@ export default function NFTDetails() {
   return (
     <>
     <Navbar />
-    
+    <div>
+      {loading ? ( <span>Loading...</span>) : (
+        <Container>
+          <Details>
+            <img src={imageURI} />
+            <span>
+              <b>
+                {name} - #{tokenId}
+              </b>
+            </span>
+            
+          </Details>
+        </Container>
+      )}
+    </div>
     </>
   )
 }
