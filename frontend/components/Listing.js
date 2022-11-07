@@ -1,7 +1,7 @@
+import { formatEther } from 'ethers/lib/utils';
 import { useEffect, useState } from 'react';
 import { useAccount, useContract, useProvider, erc721ABI } from 'wagmi';
 import styled from 'styled-components';
-import { formatEther } from 'ethers/lib/utils';
 
 export default function Listing(props) {
   // State variables to hold information about the NFT
@@ -14,7 +14,7 @@ export default function Listing(props) {
   // Get the provider, connected address, and a contract instance
   // for the NFT contract using wagmi
   const provider = useProvider();
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const ERC721Contract = useContract({
     addressOrName: props.nftAddress,
     contractInterface: erc721ABI,
@@ -45,21 +45,22 @@ export default function Listing(props) {
       setName(metadataJSON.name);
       setImageURI(image);
       setLoading(false);
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
-    }
+    } catch (error) {}
   }
 
   // Fetch the NFT details when component is loaded
   useEffect(() => {
-    fetchNFTDetails();
-  }, []);
+    if (isConnected && address) {
+      fetchNFTDetails();
+    }
+  }, [isConnected]);
+
+  if (!isConnected) return null;
 
   return (
-    <>
+    <div>
       {loading ? (
-        <span>Loading...</span>
+        <span>Loading</span>
       ) : (
         <Card>
           <img src={imageURI} />
@@ -76,7 +77,7 @@ export default function Listing(props) {
           </Container>
         </Card>
       )}
-    </>
+    </div>
   );
 }
 

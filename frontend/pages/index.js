@@ -53,7 +53,7 @@ export default function Home() {
     if (isConnected) {
       fetchListings();
     }
-  }, []);
+  }, [isConnected]);
 
   return (
     <>
@@ -70,15 +70,18 @@ export default function Home() {
           listings.map((listing) => {
             return (
               <Link
+                legacyBehavior
                 key={listing.id}
                 href={`/${listing.nftAddress}/${listing.tokenId}`}
               >
-                <Listing
-                  nftAddress={listing.nftAddress}
-                  tokenId={listing.tokenId}
-                  price={listing.price}
-                  seller={listing.seller}
-                />
+                <a>
+                  <Listing
+                    nftAddress={listing.nftAddress}
+                    tokenId={listing.tokenId}
+                    price={listing.price}
+                    seller={listing.seller}
+                  />
+                </a>
               </Link>
             );
           })}
