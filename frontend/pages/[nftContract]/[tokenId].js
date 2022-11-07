@@ -80,64 +80,66 @@ export default function NFTDetails() {
     setIsActive(listing.buyer === null);
     setIsOwner(address.toLowerCase() === listing.seller.toLowerCase());
     setListing(listing);
+  }
 
-    // Function to fetch NFT details from it's metadata, similar to the one in Listing.js
-    async function fetchNFTDetails() {
-      const ERC721Contract = new Contract(nftAddress, erc721ABI, signer);
-      let tokenURI = await ERC721Contract.tokenURI(tokenId);
-      tokenURI = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/');
-      const metadata = await fetch(tokenURI);
-      const metadataJSON = await metadata.json();
+  // Function to fetch NFT details from it's metadata, similar to the one in Listing.js
+  async function fetchNFTDetails() {
+    const ERC721Contract = new Contract(nftAddress, erc721ABI, signer);
+    let tokenURI = await ERC721Contract.tokenURI(tokenId);
+    tokenURI = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/');
 
-      let image = metadataJSON.imageUrl;
-      image = image.replace('ipfs://', 'https://ipfs.io/ipfs/');
+    const metadata = await fetch(tokenURI);
+    const metadataJSON = await metadata.json();
 
-      setName(metadataJSON.name);
-      setImageURI(image);
-    }
+    let image = metadataJSON.imageUrl;
+    image = image.replace('ipfs://', 'https://ipfs.io/ipfs/');
 
-    // Function to call `updateListing` in the smart contract
-    async function updateListing() {
-      setUpdating(true);
-      const updateTxn = await MarketplaceContract.updateListing(
-        nftAddress,
-        tokenId,
-        parseEther(newPrice)
-      );
-      await updateTxn.wait();
-      await fetchListing();
-      setUpdating(false);
-    }
+    setName(metadataJSON.name);
+    setImageURI(image);
+  }
 
-    // Function to call `cancelListing` in the smart contract
-    async function cancelListing() {
-      setCanceling(true);
-      const cancelTxn = await MarketplaceContract.cancelListing(
-        nftAddress,
-        tokenId
-      );
-      await cancelTxn.wait();
-      window.alert('Listing canceled');
-      await router.push('/');
-      setCanceling(false);
-    }
+  // Function to call `updateListing` in the smart contract
+  async function updateListing() {
+    setUpdating(true);
+    const updateTxn = await MarketplaceContract.updateListing(
+      nftAddress,
+      tokenId,
+      parseEther(newPrice)
+    );
+    await updateTxn.wait();
+    await fetchListing();
+    setUpdating(false);
+  }
 
-    // Function to call `buyListing` in the smart contract
-    async function buyListing() {
-      setBuying(true);
-      const buyTxn = await MarketplaceContract.purchaseListing(
-        nftAddress,
-        tokenId,
-        {
-          value: listing.price,
-        }
-      );
-      await buyTxn.wait();
-      await fetchListing();
-      setBuying(false);
-    }
+  // Function to call `cancelListing` in the smart contract
+  async function cancelListing() {
+    setCanceling(true);
+    const cancelTxn = await MarketplaceContract.cancelListing(
+      nftAddress,
+      tokenId
+    );
+    await cancelTxn.wait();
+    window.alert('Listing canceled');
+    await router.push('/');
+    setCanceling(false);
+  }
 
-     // Load listing and NFT data on page load
+  // Function to call `buyListing` in the smart contract
+  async function buyListing() {
+    setBuying(true);
+    const buyTxn = await MarketplaceContract.purchaseListing(
+      nftAddress,
+      tokenId,
+      {
+        value: listing.price,
+      }
+    );
+    await buyTxn.wait();
+    await fetchListing();
+    setBuying(false);
+  }
+
+  // Load listing and NFT data on page load
   useEffect(() => {
     if (router.query.nftContract && router.query.tokenId && signer) {
       Promise.all([fetchListing(), fetchNFTDetails()]).finally(() =>
@@ -145,27 +147,85 @@ export default function NFTDetails() {
       );
     }
   }, [router, signer]);
-  
+
   return (
     <>
-    <Navbar />
-    <div>
-      {loading ? ( <span>Loading...</span>) : (
-        <Container>
-          <Details>
-            <img src={imageURI} />
-            <span>
-              <b>
-                {name} - #{tokenId}
-              </b>
-            </span>
-            
-          </Details>
-        </Container>
-      )}
-    </div>
+      <Navbar />
+      <div>
+        {loading ? (
+          <span>Loading...</span>
+        ) : (
+          <Container>
+            <Details>
+              <img src={imageURI} />
+              <span>
+                <b>
+                  {name} - #{tokenId}
+                </b>
+              </span>
+              <span>Price: {formatEther(listing.price)} CELO</span>
+              <span>
+                <a
+                  href={`https://alfajores.celoscan.io/address/${listing.seller}`}
+                  target="_blank"
+                >
+                  Seller:{' '}
+                  {isOwner ? 'You' : listing.seller.substring(0, 6) + '...'}
+                </a>
+              </span>
+              <span>Status: {listing.buyer === null ? 'Active' : 'Sold'}</span>
+            </Details>
+
+            <Options>
+              {!isActive && (
+                <span>
+                  Listing has been sold to{' '}
+                  <a
+                    href={`https://alfajores.celoscan.io/address/${listing.buyer}`}
+                    target="_blank"
+                  >
+                    {listing.buyer}
+                  </a>
+                </span>
+              )}
+
+              {isOwner && isActive && (
+                <>
+                  <UpdateListing>
+                    <input
+                      type="text"
+                      placeholder="New Price (in CELO)"
+                      value={newPrice}
+                      onChange={(e) => {
+                        if (e.target.value === '') {
+                          setNewPrice('0');
+                        } else {
+                          setNewPrice(e.target.value);
+                        }
+                      }}
+                    ></input>
+                    <button disabled={updating} onClick={updateListing}>
+                      Update Listing
+                    </button>
+                  </UpdateListing>
+
+                  <button disabled={canceling} onClick={cancelListing}>
+                    Cancel Listing
+                  </button>
+                </>
+              )}
+
+              {!isOwner && isActive && (
+                <Button disabled={buying} onClick={buyListing}>
+                  Buy Listing
+                </Button>
+              )}
+            </Options>
+          </Container>
+        )}
+      </div>
     </>
-  )
+  );
 }
 
 const Container = styled.div`
