@@ -3,12 +3,12 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: NFTMarketPlace
+    name: NFTMarketplace
     network: celo-alfajores
     source:
-      address: '0xE9cFE54BcD4d1FaaADa4215E8b89e82BB0e9530b'
-      abi: NFTMarketPlace
-      startBlock: 14497249
+      address: '0xd7934fa02803BBd0e0e19866904895D27Afc4257'
+      abi: NFTMarketplace
+      startBlock: 14506266
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -19,8 +19,8 @@ dataSources:
         - ListingPurchased
         - ListingUpdated
       abis:
-        - name: NFTMarketPlace
-          file: ./abis/NFTMarketPlace.json
+        - name: NFTMarketplace
+          file: ./abis/NFTMarketplace.json
       eventHandlers:
         - event: ListingCanceled(address,uint256,address)
           handler: handleListingCanceled
@@ -30,4 +30,4 @@ dataSources:
           handler: handleListingPurchased
         - event: ListingUpdated(address,uint256,uint256,address)
           handler: handleListingUpdated
-      file: ./src/nft-market-place.ts
+      file: ./src/nft-marketplace.ts
