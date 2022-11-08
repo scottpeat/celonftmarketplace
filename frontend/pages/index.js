@@ -53,7 +53,7 @@ export default function Home() {
     if (isConnected) {
       fetchListings();
     }
-  }, [isConnected]);
+  }, []);
 
   return (
     <>

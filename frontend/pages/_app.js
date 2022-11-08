@@ -1,5 +1,6 @@
 import '@rainbow-me/rainbowkit/styles.css';
 import '../styles/globals.css';
+
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
@@ -44,11 +45,12 @@ const { connectors } = getDefaultWallets({
 
 const wagmiClient = createClient({
   autoConnect: true,
+  persister: false,
   connectors,
   provider,
 });
 
-export default function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
@@ -57,3 +59,5 @@ export default function MyApp({ Component, pageProps }) {
     </WagmiConfig>
   );
 }
+
+export default MyApp;

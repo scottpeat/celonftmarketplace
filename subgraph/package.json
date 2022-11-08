@@ -1,13 +1,13 @@
 {
-  "name": "celo-nft-marketplace",
+  "name": "celomarketplace",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ scottpeat/celo-nft-marketplace",
-    "create-local": "graph create --node http://localhost:8020/ scottpeat/celo-nft-marketplace",
-    "remove-local": "graph remove --node http://localhost:8020/ scottpeat/celo-nft-marketplace",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 scottpeat/celo-nft-marketplace"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ scottpeat/celomarketplace",
+    "create-local": "graph create --node http://localhost:8020/ scottpeat/celomarketplace",
+    "remove-local": "graph remove --node http://localhost:8020/ scottpeat/celomarketplace",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 scottpeat/celomarketplace"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.32.0",

@@ -7,7 +7,7 @@ import { useContract, useSigner, erc721ABI } from 'wagmi';
 import MarketplaceABI from '../../abis/NFTMarketplace.json';
 import Navbar from '../../components/Navbar';
 import { MARKETPLACE_ADDRESS, SUBGRAPH_URL } from '../../constants';
-import styled from 'styled-components';
+import styles from '../../styles/Details.module.css';
 
 export default function NFTDetails() {
   // Extract NFT contract address and Token ID from URL
@@ -155,8 +155,8 @@ export default function NFTDetails() {
         {loading ? (
           <span>Loading...</span>
         ) : (
-          <Container>
-            <Details>
+          <div className={styles.container}>
+            <div className={styles.details}>
               <img src={imageURI} />
               <span>
                 <b>
@@ -174,9 +174,9 @@ export default function NFTDetails() {
                 </a>
               </span>
               <span>Status: {listing.buyer === null ? 'Active' : 'Sold'}</span>
-            </Details>
+            </div>
 
-            <Options>
+            <div className={styles.options}>
               {!isActive && (
                 <span>
                   Listing has been sold to{' '}
@@ -191,7 +191,7 @@ export default function NFTDetails() {
 
               {isOwner && isActive && (
                 <>
-                  <UpdateListing>
+                  <div className={styles.updateListing}>
                     <input
                       type="text"
                       placeholder="New Price (in CELO)"
@@ -207,27 +207,36 @@ export default function NFTDetails() {
                     <button disabled={updating} onClick={updateListing}>
                       Update Listing
                     </button>
-                  </UpdateListing>
+                  </div>
 
-                  <button disabled={canceling} onClick={cancelListing}>
+                  <button
+                    className={styles.btn}
+                    disabled={canceling}
+                    onClick={cancelListing}
+                  >
                     Cancel Listing
                   </button>
                 </>
               )}
 
               {!isOwner && isActive && (
-                <Button disabled={buying} onClick={buyListing}>
+                <button
+                  className={styles.btn}
+                  disabled={buying}
+                  onClick={buyListing}
+                >
                   Buy Listing
-                </Button>
+                </button>
               )}
-            </Options>
-          </Container>
+            </div>
+          </div>
         )}
       </div>
     </>
   );
 }
 
+/*
 const Container = styled.div`
   display: flex;
   width: 80%;
@@ -282,3 +291,4 @@ const Button = styled.button`
   margin-top: 1rem;
   padding: 0.5rem;
 `;
+*/
